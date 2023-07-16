@@ -47,6 +47,15 @@ function onSubmit(e) {
   localStorage.setItem("name", name);
   localStorage.setItem("email", email);
 
+  //Store input in an object
+  const obj = {
+    name,
+    email
+  }
+
+  //store object as a string in local storage
+  localStorage.setItem('userDetails',JSON.stringify(obj)); 
+
   // Display a success message
   msg.textContent = "User added successfully";
 }
