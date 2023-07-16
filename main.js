@@ -44,8 +44,8 @@ function onSubmit(e) {
   emailInput.value = "";
 
   // inputvalue stores in localStorage
-  localStorage.setItem("name", name);
-  localStorage.setItem("email", email);
+  //localStorage.setItem("name", name);
+  //localStorage.setItem("email", email);
 
   //Store input in an object
   const obj = {
@@ -53,8 +53,14 @@ function onSubmit(e) {
     email
   }
 
+  // Retrieve existing user details from localStorage
+  let userDetails = JSON.parse(localStorage.getItem("userDetails")) || [];
+
+  // Add the new user object to the array
+  userDetails.push(obj);
+
   //store object as a string in local storage
-  localStorage.setItem('userDetails',JSON.stringify(obj)); 
+  localStorage.setItem('userDetails',JSON.stringify(userDetails)); 
 
   // Display a success message
   msg.textContent = "User added successfully";
