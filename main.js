@@ -2,7 +2,7 @@
 const myForm = document.querySelector("#my-form");
 const nameInput = document.querySelector("#name");
 const emailInput = document.querySelector("#email");
-const phoneInput = document.querySelector('#phone')
+const phoneInput = document.querySelector("#phone");
 const msg = document.querySelector(".msg");
 const userList = document.querySelector("#users");
 //const body = document.querySelector('body');
@@ -44,7 +44,7 @@ function onSubmit(e) {
   // Clear the input fields
   nameInput.value = "";
   emailInput.value = "";
-  phoneInput.value="";
+  phoneInput.value = "";
 
   // inputvalue stores in localStorage
   //localStorage.setItem("name", name);
@@ -54,8 +54,8 @@ function onSubmit(e) {
   const obj = {
     name,
     email,
-    phone
-  }
+    phone,
+  };
 
   // Retrieve existing user details from localStorage
   let userDetails = JSON.parse(localStorage.getItem("userDetails")) || [];
@@ -64,7 +64,7 @@ function onSubmit(e) {
   userDetails.push(obj);
 
   //store object as a string in local storage
-  localStorage.setItem('userDetails',JSON.stringify(userDetails)); 
+  localStorage.setItem("userDetails", JSON.stringify(userDetails));
 
   // Display a success message
   msg.textContent = "User added successfully";
@@ -74,19 +74,30 @@ function onSubmit(e) {
 }
 
 function showUserOnScreen(obj) {
-  const parentElem = document.getElementById('users')
-  const childElem = document.createElement('li')
-  childElem.textContent = obj.name + ' - ' + obj.email + ' - ' + obj.phone;
+  const parentElem = document.getElementById("users");
+  const childElem = document.createElement("li");
+  childElem.textContent = obj.name + " - " + obj.email + " - " + obj.phone;
 
   const deleteButton = document.createElement("input");
   deleteButton.type = "button";
-  deleteButton.value = "Delete"
+  deleteButton.value = "Delete";
   deleteButton.onclick = () => {
-      localStorage.removeItem(obj.email)
-      parentElem.removeChild(childElem)
-  }
-  childElem.appendChild(deleteButton)
-  parentElem.appendChild(childElem)
-  
-}
+    localStorage.removeItem(obj.email);
+    parentElem.removeChild(childElem);
+  };
 
+  const editButton = document.createElement("input");
+  editButton.type = "button";
+  editButton.value = "Edit";
+  editButton.onclick = () => {
+    localStorage.removeItem(obj.email);
+    parentElem.removeChild(childElem);
+    document.getElementById('name').value = obj.name;
+    document.getElementById('email').value = obj.email;
+    document.getElementById('phone').value = obj.phone;
+  };
+
+  childElem.appendChild(deleteButton);
+  childElem.appendChild(editButton);
+  parentElem.appendChild(childElem);
+}
