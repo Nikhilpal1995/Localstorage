@@ -2,6 +2,7 @@
 const myForm = document.querySelector("#my-form");
 const nameInput = document.querySelector("#name");
 const emailInput = document.querySelector("#email");
+const phoneInput = document.querySelector('#phone')
 const msg = document.querySelector(".msg");
 const userList = document.querySelector("#users");
 //const body = document.querySelector('body');
@@ -32,9 +33,10 @@ function onSubmit(e) {
   // Get the input values
   const name = nameInput.value;
   const email = emailInput.value;
+  const phone = phoneInput.value;
 
   // Validate the input
-  if (name === "" || email === "") {
+  if (name === "" || email === "" || phone === "") {
     msg.textContent = "Please fill in all fields";
     return;
   }
@@ -42,6 +44,7 @@ function onSubmit(e) {
   // Clear the input fields
   nameInput.value = "";
   emailInput.value = "";
+  phoneInput.value="";
 
   // inputvalue stores in localStorage
   //localStorage.setItem("name", name);
@@ -50,7 +53,8 @@ function onSubmit(e) {
   //Store input in an object
   const obj = {
     name,
-    email
+    email,
+    phone
   }
 
   // Retrieve existing user details from localStorage
@@ -64,4 +68,25 @@ function onSubmit(e) {
 
   // Display a success message
   msg.textContent = "User added successfully";
+
+  // Render the updated user list
+  showUserOnScreen(obj);
 }
+
+function showUserOnScreen(obj) {
+  const parentElem = document.getElementById('users')
+  const childElem = document.createElement('li')
+  childElem.textContent = obj.name + ' - ' + obj.email + ' - ' + obj.phone;
+
+  const deleteButton = document.createElement("input");
+  deleteButton.type = "button";
+  deleteButton.value = "Delete"
+  deleteButton.onclick = () => {
+      localStorage.removeItem(obj.email)
+      parentElem.removeChild(childElem)
+  }
+  childElem.appendChild(deleteButton)
+  parentElem.appendChild(childElem)
+  
+}
+

@@ -9,12 +9,12 @@
   </head>
   <body>
     <header>
-      <h1>JS For Beginners</h1>
+      <h1>Booking Appointment App</h1>
     </header>
 
     <section class="container">
       <form id="my-form">
-        <h1>Add User</h1>
+        <h1>Add Details of Customer</h1>
         <div class="msg"></div>
         <div>
           <label for="name">Name:</label>
@@ -24,9 +24,17 @@
           <label for="email">Email:</label>
           <input type="text" id="email">
         </div>
+        <div>
+          <label for="phone">Phone No:</label>
+          <input type="text" id="phone">
+        </div>
         <input class="btn" type="submit" value="Submit">
       </form>
     </section>
+
+    <div>
+      <ul id="users"></ul>
+    </div>
     
 
     <script src="main.js"></script>
