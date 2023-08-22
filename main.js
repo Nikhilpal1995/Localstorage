@@ -57,20 +57,29 @@ function onSubmit(e) {
     phone,
   };
 
+  axios.post("https://crudcrud.com/api/41899045d2ad465b9b46cb8f5f230f86/appointmentData", obj)
+  .then((respone)=> {
+      console.log(respone.data);
+      showUserOnScreen(obj);
+  })
+  .catch((err)=> {
+    console.log(err);
+  })
+
   // Retrieve existing user details from localStorage
-  let userDetails = JSON.parse(localStorage.getItem("userDetails")) || [];
+  //let userDetails = JSON.parse(localStorage.getItem("userDetails")) || [];
 
   // Add the new user object to the array
-  userDetails.push(obj);
+  //userDetails.push(obj);
 
   //store object as a string in local storage
-  localStorage.setItem("userDetails", JSON.stringify(userDetails));
+  //localStorage.setItem("userDetails", JSON.stringify(userDetails));
 
   // Display a success message
-  msg.textContent = "User added successfully";
+  //msg.textContent = "User added successfully";
 
   // Render the updated user list
-  showUserOnScreen(obj);
+  //showUserOnScreen(obj);
 }
 
 function showUserOnScreen(obj) {
@@ -101,3 +110,18 @@ function showUserOnScreen(obj) {
   childElem.appendChild(editButton);
   parentElem.appendChild(childElem);
 }
+
+function fetchAndDisplayUsers() {
+  axios.get("https://crudcrud.com/api/41899045d2ad465b9b46cb8f5f230f86/appointmentData")
+    .then((response) => {
+      const users = response.data;
+      users.forEach((user) => {
+        showUserOnScreen(user); // Display each user on the screen
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
+window.addEventListener("load", fetchAndDisplayUsers);
