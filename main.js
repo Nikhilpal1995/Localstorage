@@ -5,6 +5,8 @@ const emailInput = document.querySelector("#email");
 const phoneInput = document.querySelector("#phone");
 const msg = document.querySelector(".msg");
 const userList = document.querySelector("#users");
+let editUserId = null;
+
 //const body = document.querySelector('body');
 
 // btn.addEventListener('click', (e) => {
@@ -30,56 +32,59 @@ myForm.addEventListener("submit", onSubmit);
 function onSubmit(e) {
   e.preventDefault();
 
-  // Get the input values
   const name = nameInput.value;
   const email = emailInput.value;
   const phone = phoneInput.value;
 
-  // Validate the input
   if (name === "" || email === "" || phone === "") {
     msg.textContent = "Please fill in all fields";
     return;
   }
 
-  // Clear the input fields
-  nameInput.value = "";
-  emailInput.value = "";
-  phoneInput.value = "";
+  // If an edit operation is ongoing, perform a PUT request
+  if (editUserId) {
+    const editedUser = {
+      name,
+      email,
+      phone,
+    };
 
-  // inputvalue stores in localStorage
-  //localStorage.setItem("name", name);
-  //localStorage.setItem("email", email);
+    axios.put(`https://crudcrud.com/api/41899045d2ad465b9b46cb8f5f230f86/appointmentData/${editUserId}`, editedUser)
+      .then((response) => {
+        console.log("User updated:", response.data);
+        clearForm();
+        fetchAndDisplayUsers(); // Update the user list on the screen
+      })
+      .catch((error) => {
+        console.error(error);
+      });
 
-  //Store input in an object
-  const obj = {
+    editUserId = null; // Reset the editUserId after the edit operation
+    return;
+  }
+
+  // If not in edit mode, perform a POST request
+  const newUser = {
     name,
     email,
     phone,
   };
 
-  axios.post("https://crudcrud.com/api/41899045d2ad465b9b46cb8f5f230f86/appointmentData", obj)
-  .then((respone)=> {
-      console.log(respone.data);
-      showUserOnScreen(obj);
-  })
-  .catch((err)=> {
-    console.log(err);
-  })
+  axios.post("https://crudcrud.com/api/41899045d2ad465b9b46cb8f5f230f86/appointmentData", newUser)
+    .then((response) => {
+      console.log("User added:", response.data);
+      clearForm();
+      fetchAndDisplayUsers(); // Update the user list on the screen
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
 
-  // Retrieve existing user details from localStorage
-  //let userDetails = JSON.parse(localStorage.getItem("userDetails")) || [];
-
-  // Add the new user object to the array
-  //userDetails.push(obj);
-
-  //store object as a string in local storage
-  //localStorage.setItem("userDetails", JSON.stringify(userDetails));
-
-  // Display a success message
-  //msg.textContent = "User added successfully";
-
-  // Render the updated user list
-  //showUserOnScreen(obj);
+function populateEditForm(user) {
+  nameInput.value = user.name;
+  emailInput.value = user.email;
+  phoneInput.value = user.phone;
 }
 
 function showUserOnScreen(obj) {
@@ -95,15 +100,11 @@ function showUserOnScreen(obj) {
     parentElem.removeChild(childElem); // Remove the user from the screen
   };
 
-  const editButton = document.createElement("input");
-  editButton.type = "button";
-  editButton.value = "Edit";
+  const editButton = document.createElement("button");
+  editButton.textContent = "Edit";
+  editButton.classList.add("edit-btn");
   editButton.onclick = () => {
-    localStorage.removeItem(obj.email);
-    parentElem.removeChild(childElem);
-    document.getElementById('name').value = obj.name;
-    document.getElementById('email').value = obj.email;
-    document.getElementById('phone').value = obj.phone;
+    populateEditForm(obj); // Call the function to populate the form for editing
   };
 
   childElem.appendChild(deleteButton);
@@ -134,5 +135,9 @@ function deleteUser(userId) {
       console.error(error);
     });
 }
+
+
+
+
 
 window.addEventListener("load", fetchAndDisplayUsers);
