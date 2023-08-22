@@ -87,12 +87,12 @@ function showUserOnScreen(obj) {
   const childElem = document.createElement("li");
   childElem.textContent = obj.name + " - " + obj.email + " - " + obj.phone;
 
-  const deleteButton = document.createElement("input");
-  deleteButton.type = "button";
-  deleteButton.value = "Delete";
+  const deleteButton = document.createElement("button");
+  deleteButton.textContent = "Delete";
+  deleteButton.classList.add("delete-btn");
   deleteButton.onclick = () => {
-    localStorage.removeItem(obj.email);
-    parentElem.removeChild(childElem);
+    deleteUser(obj._id); // Call the function to delete the user
+    parentElem.removeChild(childElem); // Remove the user from the screen
   };
 
   const editButton = document.createElement("input");
@@ -118,6 +118,17 @@ function fetchAndDisplayUsers() {
       users.forEach((user) => {
         showUserOnScreen(user); // Display each user on the screen
       });
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
+
+function deleteUser(userId) {
+  axios.delete(`https://crudcrud.com/api/41899045d2ad465b9b46cb8f5f230f86/appointmentData/${userId}`)
+    .then((response) => {
+      console.log("User deleted:", userId);
     })
     .catch((error) => {
       console.error(error);
